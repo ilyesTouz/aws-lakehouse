@@ -1,16 +1,18 @@
 # aws-lakehouse
 
-docker run -it --rm \
-    -v ~/.aws:/home/hadoop/.aws \
-    -e AWS_PROFILE=$PROFILE_NAME \
-    --name glue5_pyspark \
-    public.ecr.aws/glue/aws-glue-libs:5 \
-    pyspark
+aws configure --profile glue-dev 
 
-docker run -it --rm \
-    -v ~/.aws:/home/glue_user/.aws \
-    -v $WORKSPACE_LOCATION:/home/glue_user/workspace/ \
-    -e AWS_PROFILE=$PROFILE_NAME \
-    --name glue5_spark_submit \
-    public.ecr.aws/glue/aws-glue-libs:5 \
-    pyspark
+export PROFILE_NAME="glue-dev"
+
+docker run -it `
+  -v ${HOME}\.aws:/home/glue_user/.aws:ro `
+  -v ${PWD}:/home/glue_user/workspace `
+  -e AWS_PROFILE=glue-dev `
+  -e DISABLE_SSL=true `
+  --rm `
+  public.ecr.aws/glue/aws-glue-libs:5  `
+  pyspark
+
+
+
+  
